@@ -8,6 +8,6 @@
     <fragment
         android:id="@+id/episodesFragment"
         android:name="ru.nikitaartamonov.rickandmorty.ui.pages.episodes.EpisodesFragment"
-        android:label="fragment_episodes"
+        android:label="@string/episodes"
         tools:layout="@layout/fragment_episodes" />
 </navigation>
