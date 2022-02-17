@@ -5,6 +5,10 @@ import androidx.room.Room
 import dagger.Component
 import dagger.Module
 import dagger.Provides
+import retrofit2.Retrofit
+import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
+import retrofit2.converter.gson.GsonConverterFactory
+import ru.nikitaartamonov.rickandmorty.data.retrofit.RetrofitApi
 import ru.nikitaartamonov.rickandmorty.data.room.CharacterDao
 import ru.nikitaartamonov.rickandmorty.data.room.DataBase
 import ru.nikitaartamonov.rickandmorty.domain.repos.CharactersRepo
@@ -29,16 +33,29 @@ class DbModule(private val context: Context) {
 
     @Provides
     @Singleton
-    fun provideDb(context: Context, dbPath: String) : DataBase =
-        Room.databaseBuilder(context, DataBase::class.java, dbPath).build()
+    fun provideDb(context: Context): DataBase =
+        Room.databaseBuilder(context, DataBase::class.java, "rick_and_morty.db").build()
+}
+
+@Module
+class NetworkModule {
 
     @Provides
     @Singleton
-    fun provideDbPath() : String = "rick_and_morty.db"
+    fun provideRetrofitApi(): RetrofitApi {
+        val retrofit = Retrofit
+            .Builder()
+            .baseUrl("https://rickandmortyapi.com/api/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
+            .build()
+        return retrofit.create(RetrofitApi::class.java)
+    }
 }
 
 @Singleton
-@Component(modules = [DbModule::class])
+@Component(modules = [DbModule::class, NetworkModule::class])
 interface AppComponent {
     fun getCharactersRepo(): CharactersRepo
+    fun getNetworkApi(): RetrofitApi
 }
