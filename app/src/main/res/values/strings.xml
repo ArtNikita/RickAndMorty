@@ -3,4 +3,5 @@
     <string name="characters">Characters</string>
     <string name="episodes">Episodes</string>
     <string name="locations">Locations</string>
+    <string name="character_image_description">Character image</string>
 </resources>
