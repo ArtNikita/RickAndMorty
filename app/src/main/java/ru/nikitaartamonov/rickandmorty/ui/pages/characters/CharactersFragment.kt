@@ -20,11 +20,16 @@ class CharactersFragment : Fragment(R.layout.fragment_characters) {
         super.onViewCreated(view, savedInstanceState)
         initRecyclerView()
         initViewModel()
-        viewModel.onViewIsCreated()
+        viewModel.onViewCreated()
     }
 
     private fun initViewModel() {
         viewModel.showLoadingIndicatorLiveData.observe(viewLifecycleOwner) { showLoadingIndicator(it) }
+        viewModel.renderCharactersListLiveData.observe(viewLifecycleOwner) {
+            //todo update list with diff util from adapter
+            adapter.charactersList = it
+            adapter.notifyDataSetChanged()
+        }
     }
 
     private fun showLoadingIndicator(isVisible: Boolean) {
