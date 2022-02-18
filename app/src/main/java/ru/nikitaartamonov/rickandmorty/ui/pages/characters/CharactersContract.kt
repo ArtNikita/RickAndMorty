@@ -6,7 +6,7 @@ interface CharactersContract {
 
     interface ViewModel {
 
-        fun viewIsCreated()
+        fun onViewIsCreated()
 
         val showLoadingIndicatorLiveData: LiveData<Boolean>
     }

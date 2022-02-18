@@ -20,7 +20,7 @@ class CharactersFragment : Fragment(R.layout.fragment_characters) {
         super.onViewCreated(view, savedInstanceState)
         initRecyclerView()
         initViewModel()
-        viewModel.viewIsCreated()
+        viewModel.onViewIsCreated()
     }
 
     private fun initViewModel() {

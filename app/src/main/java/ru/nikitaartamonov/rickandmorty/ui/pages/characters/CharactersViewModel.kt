@@ -16,7 +16,7 @@ class CharactersViewModel(application: Application) : AndroidViewModel(applicati
             showLoadingIndicatorLiveData.postValue(field)
         }
 
-    override fun viewIsCreated() {
+    override fun onViewIsCreated() {
         //todo load and render
     }
 
