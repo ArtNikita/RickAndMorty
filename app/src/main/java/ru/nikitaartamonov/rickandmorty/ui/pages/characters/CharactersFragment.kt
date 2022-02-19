@@ -4,32 +4,27 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
 import ru.nikitaartamonov.rickandmorty.R
 import ru.nikitaartamonov.rickandmorty.databinding.FragmentCharactersBinding
-import ru.nikitaartamonov.rickandmorty.ui.pages.characters.recycler_view.CharactersAdapter
 
 class CharactersFragment : Fragment(R.layout.fragment_characters) {
 
     private val binding by viewBinding(FragmentCharactersBinding::bind)
     private val viewModel: CharactersContract.ViewModel by viewModels<CharactersViewModel>()
 
-    private val adapter = CharactersAdapter()
+    private val adapter by lazy { viewModel.adapter }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initRecyclerView()
         initViewModel()
-        viewModel.onViewCreated()
     }
 
     private fun initViewModel() {
         viewModel.showLoadingIndicatorLiveData.observe(viewLifecycleOwner) { showLoadingIndicator(it) }
-        viewModel.renderCharactersListLiveData.observe(viewLifecycleOwner) {
-            //todo update list with diff util from adapter
-            adapter.charactersList = it
-            adapter.notifyDataSetChanged()
-        }
+        viewModel.renderCharactersListLiveData.observe(viewLifecycleOwner) { adapter.updateList(it) }
     }
 
     private fun showLoadingIndicator(isVisible: Boolean) {
@@ -38,5 +33,14 @@ class CharactersFragment : Fragment(R.layout.fragment_characters) {
 
     private fun initRecyclerView() {
         binding.charactersRecyclerView.adapter = adapter
+        binding.charactersRecyclerView.addOnScrollListener(object :
+            RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (!recyclerView.canScrollVertically(1) && newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    viewModel.onRecyclerViewScrolledDown()
+                }
+            }
+        })
     }
 }

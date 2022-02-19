@@ -1,15 +1,19 @@
 package ru.nikitaartamonov.rickandmorty.ui.pages.characters
 
 import androidx.lifecycle.LiveData
+import ru.nikitaartamonov.rickandmorty.domain.entities.EntityPage
 import ru.nikitaartamonov.rickandmorty.domain.entities.character.CharacterEntity
+import ru.nikitaartamonov.rickandmorty.ui.pages.characters.recycler_view.CharactersAdapter
 
 interface CharactersContract {
 
     interface ViewModel {
 
-        fun onViewCreated()
+        fun onRecyclerViewScrolledDown()
 
         val showLoadingIndicatorLiveData: LiveData<Boolean>
-        val renderCharactersListLiveData: LiveData<List<CharacterEntity>>
+        val renderCharactersListLiveData: LiveData<EntityPage<CharacterEntity>>
+
+        val adapter: CharactersAdapter
     }
 }
