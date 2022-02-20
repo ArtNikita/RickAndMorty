@@ -1,6 +1,8 @@
 package ru.nikitaartamonov.rickandmorty.ui.pages.characters
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -17,6 +19,7 @@ class CharactersFragment : Fragment(R.layout.fragment_characters) {
     private val adapter by lazy { viewModel.adapter }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        setHasOptionsMenu(true)
         super.onViewCreated(view, savedInstanceState)
         initRecyclerView()
         initRetryButton()
@@ -52,5 +55,10 @@ class CharactersFragment : Fragment(R.layout.fragment_characters) {
 
     private fun initRetryButton() {
         binding.charactersRetryButton.setOnClickListener { viewModel.onRetryButtonPressed() }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.tool_bar_menu, menu)
     }
 }
