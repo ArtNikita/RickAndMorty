@@ -10,5 +10,5 @@ interface CharactersRepo {
 
     fun addAll(characters: List<CharacterEntity>): Completable
 
-    fun getAll(limit: Int, offset: Int): Single<List<CharacterEntity>>
+    fun getAll(limit: Int, offset: Int, name: String): Single<List<CharacterEntity>>
 }

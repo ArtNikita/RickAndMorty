@@ -28,6 +28,8 @@ class CharactersViewModel(application: Application) : AndroidViewModel(applicati
     private var lastLoadedPageNumber = 0
     private var pageToLoadNumber = 1
 
+    private var currentQuery = ""
+
     private var charactersPage: EntityPage<CharacterEntity> =
         EntityPage(PageInfo(0, 0, null, null), emptyList())
         set(value) {
@@ -36,11 +38,23 @@ class CharactersViewModel(application: Application) : AndroidViewModel(applicati
         }
 
     override fun onRecyclerViewScrolledDown() {
-        if (pageToLoadNumber == lastLoadedPageNumber) loadCharacters(page = ++pageToLoadNumber)
+        if (pageToLoadNumber == lastLoadedPageNumber) {
+            loadCharacters(
+                page = ++pageToLoadNumber,
+                name = currentQuery
+            )
+        }
     }
 
     override fun onRetryButtonPressed() {
-        loadCharacters(page = pageToLoadNumber)
+        loadCharacters(page = pageToLoadNumber, name = currentQuery)
+    }
+
+    override fun onQueryTextChange(text: String) {
+        lastLoadedPageNumber = 0
+        pageToLoadNumber = 1
+        currentQuery = text
+        loadCharacters(page = pageToLoadNumber, name = text)
     }
 
     private var isLoading = false
@@ -81,9 +95,15 @@ class CharactersViewModel(application: Application) : AndroidViewModel(applicati
                     errorMode = false
                 },
                 onError = {
-                    errorMode = true
-                    Log.i("@@@", it.message.toString())
-                    loadFromRoomRepo()
+                    if (it.message?.contains(Constants.EMPTY_RESPONSE_MESSAGE) != false) {
+                        isLoading = false
+                        //todo notify about empty response
+                        if (lastLoadedPageNumber != 0) return@subscribeBy
+                        charactersPage = EntityPage(PageInfo(-1, -1, null, null), emptyList())
+                    } else {
+                        errorMode = true
+                        loadFromRoomRepo()
+                    }
                 }
             )
         )
@@ -91,7 +111,8 @@ class CharactersViewModel(application: Application) : AndroidViewModel(applicati
 
     private fun loadFromRoomRepo() {
         getApplication<App>().appComponent.getCharactersRepo().getAll(
-            Constants.ENTITY_PAGE_SIZE, Constants.ENTITY_PAGE_SIZE * lastLoadedPageNumber
+            Constants.ENTITY_PAGE_SIZE, Constants.ENTITY_PAGE_SIZE * lastLoadedPageNumber,
+            name = currentQuery
         )
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(

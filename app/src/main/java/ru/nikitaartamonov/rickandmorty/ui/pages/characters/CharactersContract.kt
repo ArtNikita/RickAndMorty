@@ -11,6 +11,7 @@ interface CharactersContract {
 
         fun onRecyclerViewScrolledDown()
         fun onRetryButtonPressed()
+        fun onQueryTextChange(text: String)
 
         val showLoadingIndicatorLiveData: LiveData<Boolean>
         val setErrorModeLiveData: LiveData<Boolean>

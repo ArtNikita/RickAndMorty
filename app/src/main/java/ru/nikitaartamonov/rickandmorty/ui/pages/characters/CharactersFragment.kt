@@ -4,12 +4,14 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
 import ru.nikitaartamonov.rickandmorty.R
 import ru.nikitaartamonov.rickandmorty.databinding.FragmentCharactersBinding
+
 
 class CharactersFragment : Fragment(R.layout.fragment_characters) {
 
@@ -60,5 +62,18 @@ class CharactersFragment : Fragment(R.layout.fragment_characters) {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.tool_bar_menu, menu)
+        val searchView = menu.findItem(R.id.search_menu).actionView as SearchView
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                //do nothing
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                viewModel.onQueryTextChange(newText)
+                return true
+            }
+
+        })
     }
 }
