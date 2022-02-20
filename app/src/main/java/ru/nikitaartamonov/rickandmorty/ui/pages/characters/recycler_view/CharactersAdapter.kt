@@ -33,7 +33,7 @@ class CharactersAdapter : RecyclerView.Adapter<CharactersViewHolder>() {
     }
 
     private fun pageAlreadyAdded(page: EntityPage<CharacterEntity>): Boolean =
-        charactersList.last().id == page.results.last().id
+        page.results.isEmpty() || charactersList.last().id == page.results.last().id
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharactersViewHolder {

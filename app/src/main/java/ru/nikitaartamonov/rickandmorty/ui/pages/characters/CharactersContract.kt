@@ -10,8 +10,10 @@ interface CharactersContract {
     interface ViewModel {
 
         fun onRecyclerViewScrolledDown()
+        fun onRetryButtonPressed()
 
         val showLoadingIndicatorLiveData: LiveData<Boolean>
+        val setErrorModeLiveData: LiveData<Boolean>
         val renderCharactersListLiveData: LiveData<EntityPage<CharacterEntity>>
 
         val adapter: CharactersAdapter

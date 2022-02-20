@@ -21,6 +21,7 @@ class CharactersViewModel(application: Application) : AndroidViewModel(applicati
     override val adapter: CharactersAdapter = CharactersAdapter()
 
     override val showLoadingIndicatorLiveData: LiveData<Boolean> = MutableLiveData()
+    override val setErrorModeLiveData: LiveData<Boolean> = MutableLiveData()
     override val renderCharactersListLiveData: LiveData<EntityPage<CharacterEntity>> =
         MutableLiveData()
 
@@ -38,10 +39,20 @@ class CharactersViewModel(application: Application) : AndroidViewModel(applicati
         if (pageToLoadNumber == lastLoadedPageNumber) loadCharacters(page = ++pageToLoadNumber)
     }
 
+    override fun onRetryButtonPressed() {
+        loadCharacters(page = pageToLoadNumber)
+    }
+
     private var isLoading = false
         set(value) {
             field = value
             showLoadingIndicatorLiveData.postValue(value)
+        }
+
+    private var errorMode = false
+        set(value) {
+            field = value
+            setErrorModeLiveData.postValue(value)
         }
 
     private var compositeDisposable = CompositeDisposable()
@@ -67,9 +78,10 @@ class CharactersViewModel(application: Application) : AndroidViewModel(applicati
                     lastLoadedPageNumber = pageToLoadNumber
                     saveToLocalRepo(it)
                     isLoading = false
+                    errorMode = false
                 },
                 onError = {
-                    //todo show error message
+                    errorMode = true
                     Log.i("@@@", it.message.toString())
                     loadFromRoomRepo()
                 }

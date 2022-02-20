@@ -19,12 +19,18 @@ class CharactersFragment : Fragment(R.layout.fragment_characters) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initRecyclerView()
+        initRetryButton()
         initViewModel()
     }
 
     private fun initViewModel() {
         viewModel.showLoadingIndicatorLiveData.observe(viewLifecycleOwner) { showLoadingIndicator(it) }
         viewModel.renderCharactersListLiveData.observe(viewLifecycleOwner) { adapter.updateList(it) }
+        viewModel.setErrorModeLiveData.observe(viewLifecycleOwner) { setErrorMode(it) }
+    }
+
+    private fun setErrorMode(isVisible: Boolean) {
+        binding.charactersRetryButton.visibility = if (isVisible) View.VISIBLE else View.GONE
     }
 
     private fun showLoadingIndicator(isVisible: Boolean) {
@@ -42,5 +48,9 @@ class CharactersFragment : Fragment(R.layout.fragment_characters) {
                 }
             }
         })
+    }
+
+    private fun initRetryButton() {
+        binding.charactersRetryButton.setOnClickListener { viewModel.onRetryButtonPressed() }
     }
 }
