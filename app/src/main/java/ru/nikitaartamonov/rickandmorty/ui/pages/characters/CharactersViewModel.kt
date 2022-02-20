@@ -9,6 +9,7 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.kotlin.subscribeBy
 import ru.nikitaartamonov.rickandmorty.App
+import ru.nikitaartamonov.rickandmorty.data.Constants
 import ru.nikitaartamonov.rickandmorty.domain.entities.EntityPage
 import ru.nikitaartamonov.rickandmorty.domain.entities.PageInfo
 import ru.nikitaartamonov.rickandmorty.domain.entities.character.CharacterEntity
@@ -64,15 +65,38 @@ class CharactersViewModel(application: Application) : AndroidViewModel(applicati
                 onSuccess = {
                     charactersPage = it
                     lastLoadedPageNumber = pageToLoadNumber
-                    //todo add to room repo
+                    saveToLocalRepo(it)
                     isLoading = false
                 },
                 onError = {
-                    //todo load from room repo, show error message
+                    //todo show error message
                     Log.i("@@@", it.message.toString())
-                    isLoading = false
+                    loadFromRoomRepo()
                 }
             )
+        )
+    }
+
+    private fun loadFromRoomRepo() {
+        getApplication<App>().appComponent.getCharactersRepo().getAll(
+            Constants.ENTITY_PAGE_SIZE, Constants.ENTITY_PAGE_SIZE * lastLoadedPageNumber
+        )
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onSuccess = {
+                    isLoading = false
+                    val prevPage = if (lastLoadedPageNumber == 0) null else "-1"
+                    charactersPage = EntityPage(PageInfo(-1, -1, "-1", prevPage), it)
+                },
+                onError = {
+                    Log.i("@@@", it.message.toString())
+                }
+            )
+    }
+
+    private fun saveToLocalRepo(it: EntityPage<CharacterEntity>) {
+        compositeDisposable.add(
+            getApplication<App>().appComponent.getCharactersRepo().addAll(it.results).subscribe()
         )
     }
 
