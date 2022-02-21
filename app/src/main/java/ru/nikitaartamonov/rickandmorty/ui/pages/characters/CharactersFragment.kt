@@ -10,8 +10,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.google.android.material.chip.Chip
 import ru.nikitaartamonov.rickandmorty.R
 import ru.nikitaartamonov.rickandmorty.databinding.FragmentCharactersBinding
+import ru.nikitaartamonov.rickandmorty.domain.entities.character.CharactersFilterState
 
 
 class CharactersFragment : Fragment(R.layout.fragment_characters) {
@@ -32,6 +34,31 @@ class CharactersFragment : Fragment(R.layout.fragment_characters) {
         initRecyclerView()
         initRetryButton()
         binding.shadowFrameLayout.setOnClickListener { showOrHideFilterMenu() }
+        initFilterListener()
+    }
+
+    private fun initFilterListener() {
+        binding.charactersFilters.speciesFilterChipGroup.setOnCheckedChangeListener { _, checkedId ->
+            val checkedChip =
+                binding.charactersFilters.speciesFilterChipGroup.findViewById<Chip>(checkedId)
+            viewModel.onFiltersStateChange(
+                CharactersFilterState.Companion.FilterType.SPECIES, checkedChip?.text?.toString()
+            )
+        }
+        binding.charactersFilters.statusFilterChipGroup.setOnCheckedChangeListener { _, checkedId ->
+            val checkedChip =
+                binding.charactersFilters.statusFilterChipGroup.findViewById<Chip>(checkedId)
+            viewModel.onFiltersStateChange(
+                CharactersFilterState.Companion.FilterType.STATUS, checkedChip?.text?.toString()
+            )
+        }
+        binding.charactersFilters.genderFilterChipGroup.setOnCheckedChangeListener { _, checkedId ->
+            val checkedChip =
+                binding.charactersFilters.genderFilterChipGroup.findViewById<Chip>(checkedId)
+            viewModel.onFiltersStateChange(
+                CharactersFilterState.Companion.FilterType.GENDER, checkedChip?.text?.toString()
+            )
+        }
     }
 
     private fun initViewModel() {

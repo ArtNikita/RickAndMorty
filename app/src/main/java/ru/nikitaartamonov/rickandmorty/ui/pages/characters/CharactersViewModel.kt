@@ -13,6 +13,7 @@ import ru.nikitaartamonov.rickandmorty.data.Constants
 import ru.nikitaartamonov.rickandmorty.domain.entities.EntityPage
 import ru.nikitaartamonov.rickandmorty.domain.entities.PageInfo
 import ru.nikitaartamonov.rickandmorty.domain.entities.character.CharacterEntity
+import ru.nikitaartamonov.rickandmorty.domain.entities.character.CharactersFilterState
 import ru.nikitaartamonov.rickandmorty.ui.pages.characters.recycler_view.CharactersAdapter
 
 class CharactersViewModel(application: Application) : AndroidViewModel(application),
@@ -28,7 +29,7 @@ class CharactersViewModel(application: Application) : AndroidViewModel(applicati
     private var lastLoadedPageNumber = 0
     private var pageToLoadNumber = 1
 
-    private var currentQuery = ""
+    private val charactersFilterState = CharactersFilterState()
 
     private var charactersPage: EntityPage<CharacterEntity> =
         EntityPage(PageInfo(0, 0, null, null), emptyList())
@@ -41,20 +42,40 @@ class CharactersViewModel(application: Application) : AndroidViewModel(applicati
         if (pageToLoadNumber == lastLoadedPageNumber) {
             loadCharacters(
                 page = ++pageToLoadNumber,
-                name = currentQuery
+                charactersFilterState
             )
         }
     }
 
     override fun onRetryButtonPressed() {
-        loadCharacters(page = pageToLoadNumber, name = currentQuery)
+        loadCharacters(page = pageToLoadNumber, charactersFilterState)
     }
 
     override fun onQueryTextChange(text: String) {
         lastLoadedPageNumber = 0
         pageToLoadNumber = 1
-        currentQuery = text
-        loadCharacters(page = pageToLoadNumber, name = text)
+        charactersFilterState.name = text
+        loadCharacters(page = pageToLoadNumber, charactersFilterState)
+    }
+
+    override fun onFiltersStateChange(
+        filterType: CharactersFilterState.Companion.FilterType,
+        filterName: String?
+    ) {
+        when (filterType) {
+            CharactersFilterState.Companion.FilterType.SPECIES -> {
+                charactersFilterState.species = filterName
+            }
+            CharactersFilterState.Companion.FilterType.STATUS -> {
+                charactersFilterState.status = filterName
+            }
+            CharactersFilterState.Companion.FilterType.GENDER -> {
+                charactersFilterState.gender = filterName
+            }
+        }
+        lastLoadedPageNumber = 0
+        pageToLoadNumber = 1
+        loadCharacters(page = pageToLoadNumber, charactersFilterState)
     }
 
     private var isLoading = false
@@ -72,19 +93,22 @@ class CharactersViewModel(application: Application) : AndroidViewModel(applicati
     private var compositeDisposable = CompositeDisposable()
 
     init {
-        loadCharacters(page = pageToLoadNumber)
+        loadCharacters(page = pageToLoadNumber, charactersFilterState)
     }
 
     private fun loadCharacters(
         page: Int? = null,
-        name: String? = null,
-        status: String? = null,
-        species: String? = null,
-        gender: String? = null
+        charactersFilterState: CharactersFilterState
     ) {
         isLoading = true
         compositeDisposable.add(getApplication<App>().appComponent.getNetworkApi()
-            .getCharacterPage(page, name, status, species, gender)
+            .getCharacterPage(
+                page,
+                charactersFilterState.name,
+                charactersFilterState.status,
+                charactersFilterState.species,
+                charactersFilterState.gender
+            )
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
                 onSuccess = {
@@ -112,7 +136,7 @@ class CharactersViewModel(application: Application) : AndroidViewModel(applicati
     private fun loadFromRoomRepo() {
         getApplication<App>().appComponent.getCharactersRepo().getAll(
             Constants.ENTITY_PAGE_SIZE, Constants.ENTITY_PAGE_SIZE * lastLoadedPageNumber,
-            name = currentQuery
+            name = charactersFilterState.name
         )
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
