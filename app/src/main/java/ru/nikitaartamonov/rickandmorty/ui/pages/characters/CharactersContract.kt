@@ -21,6 +21,7 @@ interface CharactersContract {
 
         val showLoadingIndicatorLiveData: LiveData<Boolean>
         val setErrorModeLiveData: LiveData<Boolean>
+        val emptyResponseLiveData: LiveData<Boolean>
         val renderCharactersListLiveData: LiveData<EntityPage<CharacterEntity>>
 
         val adapter: CharactersAdapter

@@ -25,4 +25,5 @@
     <string name="male" translatable="false">Male</string>
     <string name="female" translatable="false">Female</string>
     <string name="genderless" translatable="false">Genderless</string>
+    <string name="nothing_was_found">Nothing was found 👀</string>
 </resources>

@@ -1,7 +1,6 @@
 package ru.nikitaartamonov.rickandmorty.ui.pages.characters
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -23,6 +22,7 @@ class CharactersViewModel(application: Application) : AndroidViewModel(applicati
 
     override val showLoadingIndicatorLiveData: LiveData<Boolean> = MutableLiveData()
     override val setErrorModeLiveData: LiveData<Boolean> = MutableLiveData()
+    override val emptyResponseLiveData: LiveData<Boolean> = MutableLiveData()
     override val renderCharactersListLiveData: LiveData<EntityPage<CharacterEntity>> =
         MutableLiveData()
 
@@ -96,6 +96,12 @@ class CharactersViewModel(application: Application) : AndroidViewModel(applicati
             setErrorModeLiveData.postValue(value)
         }
 
+    private var isEmptyResponse = false
+        set(value) {
+            field = value
+            emptyResponseLiveData.postValue(value)
+        }
+
     private var compositeDisposable = CompositeDisposable()
 
     init {
@@ -107,6 +113,7 @@ class CharactersViewModel(application: Application) : AndroidViewModel(applicati
         charactersFilterState: CharactersFilterState
     ) {
         isLoading = true
+        isEmptyResponse = false
         compositeDisposable.add(getApplication<App>().appComponent.getNetworkApi()
             .getCharacterPage(
                 page,
@@ -127,8 +134,9 @@ class CharactersViewModel(application: Application) : AndroidViewModel(applicati
                 onError = {
                     if (it.message?.contains(Constants.EMPTY_RESPONSE_MESSAGE) != false) {
                         isLoading = false
-                        //todo notify about empty response
+                        errorMode = false
                         if (lastLoadedPageNumber != 0) return@subscribeBy
+                        isEmptyResponse = true
                         charactersPage = EntityPage(PageInfo(-1, -1, null, null), emptyList())
                     } else {
                         errorMode = true
@@ -153,9 +161,7 @@ class CharactersViewModel(application: Application) : AndroidViewModel(applicati
                     isLoading = false
                     val prevPage = if (lastLoadedPageNumber == 0) null else "-1"
                     charactersPage = EntityPage(PageInfo(-1, -1, "-1", prevPage), it)
-                },
-                onError = {
-                    Log.i("@@@", it.message.toString())
+                    if (it.isEmpty()) isEmptyResponse = true
                 }
             )
     }

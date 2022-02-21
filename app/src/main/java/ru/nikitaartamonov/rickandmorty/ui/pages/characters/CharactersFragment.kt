@@ -69,6 +69,11 @@ class CharactersFragment : Fragment(R.layout.fragment_characters) {
         viewModel.showLoadingIndicatorLiveData.observe(viewLifecycleOwner) { showLoadingIndicator(it) }
         viewModel.renderCharactersListLiveData.observe(viewLifecycleOwner) { adapter.updateList(it) }
         viewModel.setErrorModeLiveData.observe(viewLifecycleOwner) { setErrorMode(it) }
+        viewModel.emptyResponseLiveData.observe(viewLifecycleOwner) { setEmptyResponseMode(it) }
+    }
+
+    private fun setEmptyResponseMode(isVisible: Boolean) {
+        binding.emptyResponseTextView.visibility = if (isVisible) View.VISIBLE else View.GONE
     }
 
     private fun setErrorMode(isVisible: Boolean) {
