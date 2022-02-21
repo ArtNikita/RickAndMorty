@@ -17,6 +17,13 @@ interface CharacterDao {
     @Insert(onConflict = IGNORE)
     fun addAll(characters: List<CharacterEntity>): Completable
 
-    @Query("SELECT * FROM characterentity WHERE name LIKE '%' || :name || '%' LIMIT :limit OFFSET :offset")
-    fun getAll(limit: Int, offset: Int, name: String): Single<List<CharacterEntity>>
+    @Query("SELECT * FROM characterentity WHERE name LIKE '%' || :name || '%' AND species LIKE '%' || :species || '%' AND status LIKE '%' || :status || '%' AND gender LIKE '%' || :gender || '%' LIMIT :limit OFFSET :offset")
+    fun getAll(
+        limit: Int,
+        offset: Int,
+        name: String,
+        species: String,
+        status: String,
+        gender: String
+    ): Single<List<CharacterEntity>>
 }

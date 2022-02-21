@@ -136,7 +136,10 @@ class CharactersViewModel(application: Application) : AndroidViewModel(applicati
     private fun loadFromRoomRepo() {
         getApplication<App>().appComponent.getCharactersRepo().getAll(
             Constants.ENTITY_PAGE_SIZE, Constants.ENTITY_PAGE_SIZE * lastLoadedPageNumber,
-            name = charactersFilterState.name
+            charactersFilterState.name,
+            charactersFilterState.species ?: "",
+            charactersFilterState.status ?: "",
+            charactersFilterState.gender ?: ""
         )
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
