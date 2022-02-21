@@ -35,6 +35,10 @@ class CharactersFragment : Fragment(R.layout.fragment_characters) {
         initRetryButton()
         binding.shadowFrameLayout.setOnClickListener { showOrHideFilterMenu() }
         initFilterListener()
+        binding.charactersRefreshLayout.setOnRefreshListener {
+            viewModel.onRefresh()
+            binding.charactersRefreshLayout.isRefreshing = false
+        }
     }
 
     private fun initFilterListener() {

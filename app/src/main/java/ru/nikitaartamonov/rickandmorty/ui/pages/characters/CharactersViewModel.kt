@@ -78,6 +78,12 @@ class CharactersViewModel(application: Application) : AndroidViewModel(applicati
         loadCharacters(page = pageToLoadNumber, charactersFilterState)
     }
 
+    override fun onRefresh() {
+        lastLoadedPageNumber = 0
+        pageToLoadNumber = 1
+        loadCharacters(page = pageToLoadNumber, charactersFilterState)
+    }
+
     private var isLoading = false
         set(value) {
             field = value

@@ -17,6 +17,7 @@ interface CharactersContract {
             filterType: CharactersFilterState.Companion.FilterType,
             filterName: String?
         )
+        fun onRefresh()
 
         val showLoadingIndicatorLiveData: LiveData<Boolean>
         val setErrorModeLiveData: LiveData<Boolean>
