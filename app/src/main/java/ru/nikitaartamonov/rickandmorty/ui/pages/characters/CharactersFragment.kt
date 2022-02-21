@@ -33,7 +33,7 @@ class CharactersFragment : Fragment(R.layout.fragment_characters) {
     private fun initViews() {
         initRecyclerView()
         initRetryButton()
-        binding.shadowFrameLayout.setOnClickListener { showOrHideFilterMenu() }
+        binding.charactersShadowFrameLayout.setOnClickListener { showOrHideFilterMenu() }
         initFilterListener()
         binding.charactersRefreshLayout.setOnRefreshListener {
             viewModel.onRefresh()
@@ -73,7 +73,7 @@ class CharactersFragment : Fragment(R.layout.fragment_characters) {
     }
 
     private fun setEmptyResponseMode(isVisible: Boolean) {
-        binding.emptyResponseTextView.visibility = if (isVisible) View.VISIBLE else View.GONE
+        binding.charactersEmptyResponseTextView.visibility = if (isVisible) View.VISIBLE else View.GONE
     }
 
     private fun setErrorMode(isVisible: Boolean) {
@@ -124,8 +124,9 @@ class CharactersFragment : Fragment(R.layout.fragment_characters) {
     }
 
     private fun showOrHideFilterMenu() {
-        val shadowIsVisible = binding.shadowFrameLayout.isVisible
-        binding.shadowFrameLayout.visibility = if (shadowIsVisible) View.GONE else View.VISIBLE
+        val shadowIsVisible = binding.charactersShadowFrameLayout.isVisible
+        binding.charactersShadowFrameLayout.visibility =
+            if (shadowIsVisible) View.GONE else View.VISIBLE
         val filtersAreVisible = binding.charactersFilters.filtersCardView.isVisible
         binding.charactersFilters.filtersCardView.visibility =
             if (filtersAreVisible) View.GONE else View.VISIBLE

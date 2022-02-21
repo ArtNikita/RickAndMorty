@@ -4,12 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/characters_refresh_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".ui.pages.characters.CharactersFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".ui.pages.characters.CharactersFragment">
+        android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/characters_recycler_view"
@@ -46,7 +46,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <FrameLayout
-            android:id="@+id/shadow_frame_layout"
+            android:id="@+id/characters_shadow_frame_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:alpha="0.2"
@@ -60,7 +60,7 @@
             layout="@layout/characters_filters" />
 
         <TextView
-            android:id="@+id/empty_response_text_view"
+            android:id="@+id/characters_empty_response_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
