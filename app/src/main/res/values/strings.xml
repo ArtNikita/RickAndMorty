@@ -6,4 +6,23 @@
     <string name="character_image_description">Character image</string>
     <string name="retry">Retry</string>
     <string name="search">Search</string>
+    <string name="filter">Filter</string>
+    <string name="status">Status</string>
+    <string name="alive" translatable="false">Alive</string>
+    <string name="dead" translatable="false">Dead</string>
+    <string name="unknown" translatable="false">unknown</string>
+    <string name="species">Species</string>
+    <string name="human" translatable="false">Human</string>
+    <string name="alien" translatable="false">Alien</string>
+    <string name="humanoid" translatable="false">Humanoid</string>
+    <string name="poopybutthole" translatable="false">Poopybutthole</string>
+    <string name="mythological_creature" translatable="false">Mythological Creature</string>
+    <string name="animal" translatable="false">Animal</string>
+    <string name="robot" translatable="false">Robot</string>
+    <string name="cronenberg" translatable="false">Cronenberg</string>
+    <string name="disease" translatable="false">Disease</string>
+    <string name="gender">Gender</string>
+    <string name="male" translatable="false">Male</string>
+    <string name="female" translatable="false">Female</string>
+    <string name="genderless" translatable="false">Genderless</string>
 </resources>

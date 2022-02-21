@@ -2,4 +2,5 @@
 <resources>
     <dimen name="card_view_corner_radius">8dp</dimen>
     <dimen name="extra_small_margin_or_padding">2dp</dimen>
+    <dimen name="normal_space_or_padding">8dp</dimen>
 </resources>

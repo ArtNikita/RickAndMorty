@@ -5,6 +5,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
@@ -23,9 +24,14 @@ class CharactersFragment : Fragment(R.layout.fragment_characters) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setHasOptionsMenu(true)
         super.onViewCreated(view, savedInstanceState)
+        initViews()
+        initViewModel()
+    }
+
+    private fun initViews() {
         initRecyclerView()
         initRetryButton()
-        initViewModel()
+        binding.shadowFrameLayout.setOnClickListener { showOrHideFilterMenu() }
     }
 
     private fun initViewModel() {
@@ -75,5 +81,17 @@ class CharactersFragment : Fragment(R.layout.fragment_characters) {
             }
 
         })
+        menu.findItem(R.id.filters_menu).setOnMenuItemClickListener {
+            showOrHideFilterMenu()
+            true
+        }
+    }
+
+    private fun showOrHideFilterMenu() {
+        val shadowIsVisible = binding.shadowFrameLayout.isVisible
+        binding.shadowFrameLayout.visibility = if (shadowIsVisible) View.GONE else View.VISIBLE
+        val filtersAreVisible = binding.charactersFilters.filtersCardView.isVisible
+        binding.charactersFilters.filtersCardView.visibility =
+            if (filtersAreVisible) View.GONE else View.VISIBLE
     }
 }
