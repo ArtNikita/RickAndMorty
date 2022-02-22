@@ -7,7 +7,7 @@ import ru.nikitaartamonov.rickandmorty.domain.entities.EntityPage
 abstract class GenericAdapter<T : IdentifiedEntity, E : RecyclerView.ViewHolder> :
     RecyclerView.Adapter<E>() {
 
-    var entitiesList: MutableList<T> = mutableListOf()
+    protected var entitiesList: MutableList<T> = mutableListOf()
 
     fun updateList(page: EntityPage<T>) {
         if (page.info.prev == null) {
