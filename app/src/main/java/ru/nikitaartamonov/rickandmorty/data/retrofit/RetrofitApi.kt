@@ -6,6 +6,7 @@ import retrofit2.http.Query
 import ru.nikitaartamonov.rickandmorty.domain.entities.EntityPage
 import ru.nikitaartamonov.rickandmorty.domain.entities.character.CharacterEntity
 import ru.nikitaartamonov.rickandmorty.domain.entities.episode.EpisodeEntity
+import ru.nikitaartamonov.rickandmorty.domain.entities.location.LocationEntity
 
 interface RetrofitApi {
 
@@ -24,4 +25,12 @@ interface RetrofitApi {
         @Query("name") name: String? = null,
         @Query("episode") episode: String? = null,
     ): Single<EntityPage<EpisodeEntity>>
+
+    @GET("location")
+    fun getLocationsPage(
+        @Query("page") page: Int? = null,
+        @Query("name") name: String? = null,
+        @Query("type") type: String? = null,
+        @Query("dimension") dimension: String? = null,
+    ): Single<EntityPage<LocationEntity>>
 }

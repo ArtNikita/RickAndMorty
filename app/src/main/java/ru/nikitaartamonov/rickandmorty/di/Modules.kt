@@ -12,10 +12,13 @@ import ru.nikitaartamonov.rickandmorty.data.retrofit.RetrofitApi
 import ru.nikitaartamonov.rickandmorty.data.room.CharacterDao
 import ru.nikitaartamonov.rickandmorty.data.room.DataBase
 import ru.nikitaartamonov.rickandmorty.data.room.EpisodeDao
+import ru.nikitaartamonov.rickandmorty.data.room.LocationDao
 import ru.nikitaartamonov.rickandmorty.domain.repos.CharactersRepo
 import ru.nikitaartamonov.rickandmorty.domain.repos.EpisodesRepo
+import ru.nikitaartamonov.rickandmorty.domain.repos.LocationsRepo
 import ru.nikitaartamonov.rickandmorty.impl.CharactersRepoRoom
 import ru.nikitaartamonov.rickandmorty.impl.EpisodesRepoRoom
+import ru.nikitaartamonov.rickandmorty.impl.LocationsRepoRoom
 import javax.inject.Singleton
 
 @Module
@@ -41,12 +44,21 @@ class DbModule(private val context: Context) {
 
     @Provides
     @Singleton
-    fun provideEntitiesRepo(episodeDao: EpisodeDao): EpisodesRepo =
+    fun provideEpisodesRepo(episodeDao: EpisodeDao): EpisodesRepo =
         EpisodesRepoRoom(episodeDao)
 
     @Provides
     @Singleton
     fun provideEpisodeDao(dataBase: DataBase): EpisodeDao = dataBase.episodesDao()
+
+    @Provides
+    @Singleton
+    fun provideLocationsRepo(locationDao: LocationDao): LocationsRepo =
+        LocationsRepoRoom(locationDao)
+
+    @Provides
+    @Singleton
+    fun provideLocationDao(dataBase: DataBase): LocationDao = dataBase.locationsDao()
 }
 
 @Module
@@ -70,5 +82,6 @@ class NetworkModule {
 interface AppComponent {
     fun getCharactersRepo(): CharactersRepo
     fun getEpisodesRepo(): EpisodesRepo
+    fun getLocationRepo(): LocationsRepo
     fun getNetworkApi(): RetrofitApi
 }
