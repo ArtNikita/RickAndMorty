@@ -161,7 +161,7 @@ class CharactersViewModel(application: Application) : AndroidViewModel(applicati
                     isLoading = false
                     val prevPage = if (lastLoadedPageNumber == 0) null else "-1"
                     charactersPage = EntityPage(PageInfo(-1, -1, "-1", prevPage), it)
-                    if (it.isEmpty()) isEmptyResponse = true
+                    if (it.isEmpty() && lastLoadedPageNumber == 0) isEmptyResponse = true
                 }
             )
     }

@@ -146,7 +146,7 @@ class EpisodesViewModel(application: Application) : AndroidViewModel(application
                     isLoading = false
                     val prevPage = if (lastLoadedPageNumber == 0) null else "-1"
                     episodesPage = EntityPage(PageInfo(-1, -1, "-1", prevPage), it)
-                    if (it.isEmpty()) isEmptyResponse = true
+                    if (it.isEmpty() && lastLoadedPageNumber == 0) isEmptyResponse = true
                 }
             )
     }
