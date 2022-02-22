@@ -1,9 +1,11 @@
 package ru.nikitaartamonov.rickandmorty.ui.pages.episodes
 
+import android.content.Context
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
@@ -111,5 +113,14 @@ class EpisodesFragment : Fragment(R.layout.fragment_episodes) {
         val filtersAreVisible = binding.episodesFilters.episodesFiltersCardView.isVisible
         binding.episodesFilters.episodesFiltersCardView.visibility =
             if (filtersAreVisible) View.GONE else View.VISIBLE
+        hideKeyBoard()
+    }
+
+    private fun hideKeyBoard() {
+        val imm =
+            requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        view?.let {
+            imm.hideSoftInputFromWindow(it.windowToken, 0)
+        }
     }
 }
