@@ -10,7 +10,9 @@ interface EpisodesContract {
 
     interface ViewModel : GenericContract.ViewModel {
 
-        val renderCharactersListLiveData: LiveData<EntityPage<EpisodeEntity>>
+        fun onFilterStateChange(episodeName: String)
+
+        val renderEpisodesListLiveData: LiveData<EntityPage<EpisodeEntity>>
         val adapter: EpisodesAdapter
     }
 }

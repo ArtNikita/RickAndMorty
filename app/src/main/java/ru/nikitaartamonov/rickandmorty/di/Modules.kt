@@ -11,8 +11,11 @@ import retrofit2.converter.gson.GsonConverterFactory
 import ru.nikitaartamonov.rickandmorty.data.retrofit.RetrofitApi
 import ru.nikitaartamonov.rickandmorty.data.room.CharacterDao
 import ru.nikitaartamonov.rickandmorty.data.room.DataBase
+import ru.nikitaartamonov.rickandmorty.data.room.EpisodeDao
 import ru.nikitaartamonov.rickandmorty.domain.repos.CharactersRepo
+import ru.nikitaartamonov.rickandmorty.domain.repos.EpisodesRepo
 import ru.nikitaartamonov.rickandmorty.impl.CharactersRepoRoom
+import ru.nikitaartamonov.rickandmorty.impl.EpisodesRepoRoom
 import javax.inject.Singleton
 
 @Module
@@ -35,6 +38,15 @@ class DbModule(private val context: Context) {
     @Singleton
     fun provideDb(context: Context): DataBase =
         Room.databaseBuilder(context, DataBase::class.java, "rick_and_morty.db").build()
+
+    @Provides
+    @Singleton
+    fun provideEntitiesRepo(episodeDao: EpisodeDao): EpisodesRepo =
+        EpisodesRepoRoom(episodeDao)
+
+    @Provides
+    @Singleton
+    fun provideEpisodeDao(dataBase: DataBase): EpisodeDao = dataBase.episodesDao()
 }
 
 @Module
@@ -57,5 +69,6 @@ class NetworkModule {
 @Component(modules = [DbModule::class, NetworkModule::class])
 interface AppComponent {
     fun getCharactersRepo(): CharactersRepo
+    fun getEpisodesRepo(): EpisodesRepo
     fun getNetworkApi(): RetrofitApi
 }

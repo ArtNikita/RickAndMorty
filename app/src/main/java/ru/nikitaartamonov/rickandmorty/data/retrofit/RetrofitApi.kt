@@ -5,6 +5,7 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 import ru.nikitaartamonov.rickandmorty.domain.entities.EntityPage
 import ru.nikitaartamonov.rickandmorty.domain.entities.character.CharacterEntity
+import ru.nikitaartamonov.rickandmorty.domain.entities.episode.EpisodeEntity
 
 interface RetrofitApi {
 
@@ -16,4 +17,11 @@ interface RetrofitApi {
         @Query("species") species: String? = null,
         @Query("gender") gender: String? = null
     ): Single<EntityPage<CharacterEntity>>
+
+    @GET("episode")
+    fun getEpisodesPage(
+        @Query("page") page: Int? = null,
+        @Query("name") name: String? = null,
+        @Query("episode") episode: String? = null,
+    ): Single<EntityPage<EpisodeEntity>>
 }
