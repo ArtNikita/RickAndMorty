@@ -3,10 +3,11 @@ package ru.nikitaartamonov.rickandmorty.domain.entities.character
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import ru.nikitaartamonov.rickandmorty.domain.recycler_view.IdentifiedEntity
 
 @Entity
 data class CharacterEntity(
-    @PrimaryKey val id: Int,
+    @PrimaryKey override val id: Int,
     val name: String,
     val status: String,
     val species: String,
@@ -17,4 +18,4 @@ data class CharacterEntity(
     val image: String,
     val episode: List<String>,
     val url: String
-)
+) : IdentifiedEntity
