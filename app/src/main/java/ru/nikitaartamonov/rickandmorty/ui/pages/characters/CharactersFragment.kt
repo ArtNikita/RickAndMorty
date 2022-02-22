@@ -127,8 +127,8 @@ class CharactersFragment : Fragment(R.layout.fragment_characters) {
         val shadowIsVisible = binding.charactersShadowFrameLayout.isVisible
         binding.charactersShadowFrameLayout.visibility =
             if (shadowIsVisible) View.GONE else View.VISIBLE
-        val filtersAreVisible = binding.charactersFilters.filtersCardView.isVisible
-        binding.charactersFilters.filtersCardView.visibility =
+        val filtersAreVisible = binding.charactersFilters.charactersFiltersCardView.isVisible
+        binding.charactersFilters.charactersFiltersCardView.visibility =
             if (filtersAreVisible) View.GONE else View.VISIBLE
     }
 }

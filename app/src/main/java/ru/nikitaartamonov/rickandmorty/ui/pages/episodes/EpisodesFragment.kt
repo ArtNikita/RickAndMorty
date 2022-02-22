@@ -6,6 +6,7 @@ import android.view.MenuInflater
 import android.view.View
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
@@ -39,8 +40,9 @@ class EpisodesFragment : Fragment(R.layout.fragment_episodes) {
     }
 
     private fun initFilterListener() {
-        //todo
-        //viewModel.onFilterStateChange("")
+        binding.episodesFilters.episodesFilterEditText.addTextChangedListener {
+            viewModel.onFilterStateChange(binding.episodesFilters.episodesFilterEditText.text.toString())
+        }
     }
 
     private fun initViewModel() {
@@ -106,8 +108,8 @@ class EpisodesFragment : Fragment(R.layout.fragment_episodes) {
         val shadowIsVisible = binding.episodesShadowFrameLayout.isVisible
         binding.episodesShadowFrameLayout.visibility =
             if (shadowIsVisible) View.GONE else View.VISIBLE
-        //todo val filtersAreVisible = binding.episodesFilters.filtersCardView.isVisible
-        //binding.charactersFilters.filtersCardView.visibility =
-        //    if (filtersAreVisible) View.GONE else View.VISIBLE
+        val filtersAreVisible = binding.episodesFilters.episodesFiltersCardView.isVisible
+        binding.episodesFilters.episodesFiltersCardView.visibility =
+            if (filtersAreVisible) View.GONE else View.VISIBLE
     }
 }
