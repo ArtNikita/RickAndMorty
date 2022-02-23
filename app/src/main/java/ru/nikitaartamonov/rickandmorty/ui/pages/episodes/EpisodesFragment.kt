@@ -11,10 +11,12 @@ import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
 import ru.nikitaartamonov.rickandmorty.R
 import ru.nikitaartamonov.rickandmorty.databinding.FragmentEpisodesBinding
+import ru.nikitaartamonov.rickandmorty.domain.recycler_view.IdentifiedEntity
 
 class EpisodesFragment : Fragment(R.layout.fragment_episodes) {
 
@@ -57,8 +59,12 @@ class EpisodesFragment : Fragment(R.layout.fragment_episodes) {
         }
     }
 
-    private fun openEpisodeDetails(id: Int) {
-        //todo
+    private fun openEpisodeDetails(entity: IdentifiedEntity) {
+        val direction = EpisodesFragmentDirections.actionEpisodesFragmentToEpisodeDetailsFragment(
+            entity.id,
+            entity.name
+        )
+        findNavController().navigate(direction)
     }
 
     private fun setEmptyResponseMode(isVisible: Boolean) {

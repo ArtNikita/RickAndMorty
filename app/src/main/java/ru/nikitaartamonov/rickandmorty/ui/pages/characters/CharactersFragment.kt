@@ -15,6 +15,7 @@ import com.google.android.material.chip.Chip
 import ru.nikitaartamonov.rickandmorty.R
 import ru.nikitaartamonov.rickandmorty.databinding.FragmentCharactersBinding
 import ru.nikitaartamonov.rickandmorty.domain.entities.character.CharactersFilterState
+import ru.nikitaartamonov.rickandmorty.domain.recycler_view.IdentifiedEntity
 
 
 class CharactersFragment : Fragment(R.layout.fragment_characters) {
@@ -76,9 +77,13 @@ class CharactersFragment : Fragment(R.layout.fragment_characters) {
         }
     }
 
-    private fun openCharacterDetails(id: Int) {
-        //todo
-        findNavController().navigate(R.id.action_charactersFragment_to_characterDetailsFragment)
+    private fun openCharacterDetails(entity: IdentifiedEntity) {
+        val direction =
+            CharactersFragmentDirections.actionCharactersFragmentToCharacterDetailsFragment(
+                entity.id,
+                entity.name
+            )
+        findNavController().navigate(direction)
     }
 
     private fun setEmptyResponseMode(isVisible: Boolean) {

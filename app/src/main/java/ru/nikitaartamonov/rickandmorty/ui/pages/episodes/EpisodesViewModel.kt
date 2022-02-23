@@ -23,7 +23,7 @@ class EpisodesViewModel(application: Application) : AndroidViewModel(application
 
     private val listener = object : OnItemClickListener {
         override fun <T : IdentifiedEntity> onClick(entity: T) {
-            openEntityDetailsLiveData.postValue(Event(entity.id))
+            openEntityDetailsLiveData.postValue(Event(entity))
         }
     }
     override val adapter: EpisodesAdapter = EpisodesAdapter(listener)
@@ -33,7 +33,7 @@ class EpisodesViewModel(application: Application) : AndroidViewModel(application
     override val emptyResponseLiveData: LiveData<Boolean> = MutableLiveData()
     override val renderEpisodesListLiveData: LiveData<EntityPage<EpisodeEntity>> =
         MutableLiveData()
-    override val openEntityDetailsLiveData: LiveData<Event<Int>> = MutableLiveData()
+    override val openEntityDetailsLiveData: LiveData<Event<IdentifiedEntity>> = MutableLiveData()
 
     private var lastLoadedPageNumber = 0
     private var pageToLoadNumber = 1

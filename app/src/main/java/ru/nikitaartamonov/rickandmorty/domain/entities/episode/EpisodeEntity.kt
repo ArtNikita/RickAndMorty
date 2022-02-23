@@ -7,7 +7,7 @@ import ru.nikitaartamonov.rickandmorty.domain.recycler_view.IdentifiedEntity
 @Entity
 data class EpisodeEntity(
     @PrimaryKey override val id: Int,
-    val name: String,
+    override val name: String,
     val air_date: String,
     val episode: String,
     val characters: List<String>,

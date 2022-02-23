@@ -23,7 +23,7 @@ class CharactersViewModel(application: Application) : AndroidViewModel(applicati
 
     private val listener = object : OnItemClickListener {
         override fun <T : IdentifiedEntity> onClick(entity: T) {
-            openEntityDetailsLiveData.postValue(Event(entity.id))
+            openEntityDetailsLiveData.postValue(Event(entity))
         }
     }
     override val adapter: CharactersAdapter = CharactersAdapter(listener)
@@ -33,7 +33,7 @@ class CharactersViewModel(application: Application) : AndroidViewModel(applicati
     override val emptyResponseLiveData: LiveData<Boolean> = MutableLiveData()
     override val renderCharactersListLiveData: LiveData<EntityPage<CharacterEntity>> =
         MutableLiveData()
-    override val openEntityDetailsLiveData: LiveData<Event<Int>> = MutableLiveData()
+    override val openEntityDetailsLiveData: LiveData<Event<IdentifiedEntity>> = MutableLiveData()
 
     private var lastLoadedPageNumber = 0
     private var pageToLoadNumber = 1

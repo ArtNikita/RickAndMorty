@@ -7,7 +7,7 @@ import ru.nikitaartamonov.rickandmorty.domain.recycler_view.IdentifiedEntity
 @Entity
 data class LocationEntity(
     @PrimaryKey override val id: Int,
-    val name: String,
+    override val name: String,
     val type: String,
     val dimension: String,
     val residents: List<String>,

@@ -9,5 +9,22 @@
         android:id="@+id/locationsFragment"
         android:name="ru.nikitaartamonov.rickandmorty.ui.pages.locations.LocationsFragment"
         android:label="@string/locations"
-        tools:layout="@layout/fragment_locations" />
+        tools:layout="@layout/fragment_locations">
+        <action
+            android:id="@+id/action_locationsFragment_to_locationDetailsFragment"
+            app:destination="@id/locationDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/locationDetailsFragment"
+        android:name="ru.nikitaartamonov.rickandmorty.ui.pages.location_details.LocationDetailsFragment"
+        android:label="{name}"
+        tools:layout="@layout/fragment_location_details">
+        <argument
+            android:name="id"
+            app:argType="integer" />
+        <argument
+            android:name="name"
+            android:defaultValue='""'
+            app:argType="string" />
+    </fragment>
 </navigation>

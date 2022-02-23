@@ -23,7 +23,7 @@ class LocationsViewModel(application: Application) : AndroidViewModel(applicatio
 
     private val listener = object : OnItemClickListener {
         override fun <T : IdentifiedEntity> onClick(entity: T) {
-            openEntityDetailsLiveData.postValue(Event(entity.id))
+            openEntityDetailsLiveData.postValue(Event(entity))
         }
     }
     override val adapter: LocationsAdapter = LocationsAdapter(listener)
@@ -33,7 +33,7 @@ class LocationsViewModel(application: Application) : AndroidViewModel(applicatio
     override val emptyResponseLiveData: LiveData<Boolean> = MutableLiveData()
     override val renderLocationsListLiveData: LiveData<EntityPage<LocationEntity>> =
         MutableLiveData()
-    override val openEntityDetailsLiveData: LiveData<Event<Int>> = MutableLiveData()
+    override val openEntityDetailsLiveData: LiveData<Event<IdentifiedEntity>> = MutableLiveData()
 
     private var lastLoadedPageNumber = 0
     private var pageToLoadNumber = 1

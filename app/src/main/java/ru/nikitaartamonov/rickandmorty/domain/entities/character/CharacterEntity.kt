@@ -8,7 +8,7 @@ import ru.nikitaartamonov.rickandmorty.domain.recycler_view.IdentifiedEntity
 @Entity
 data class CharacterEntity(
     @PrimaryKey override val id: Int,
-    val name: String,
+    override val name: String,
     val status: String,
     val species: String,
     val type: String,
