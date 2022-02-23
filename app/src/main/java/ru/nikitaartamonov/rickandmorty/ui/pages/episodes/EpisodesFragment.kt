@@ -52,6 +52,13 @@ class EpisodesFragment : Fragment(R.layout.fragment_episodes) {
         viewModel.renderEpisodesListLiveData.observe(viewLifecycleOwner) { adapter.updateList(it) }
         viewModel.setErrorModeLiveData.observe(viewLifecycleOwner) { setErrorMode(it) }
         viewModel.emptyResponseLiveData.observe(viewLifecycleOwner) { setEmptyResponseMode(it) }
+        viewModel.openEntityDetailsLiveData.observe(viewLifecycleOwner) { event ->
+            event.getContentIfNotHandled()?.let { openEpisodeDetails(it) }
+        }
+    }
+
+    private fun openEpisodeDetails(id: Int) {
+        //todo
     }
 
     private fun setEmptyResponseMode(isVisible: Boolean) {

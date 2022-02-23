@@ -9,22 +9,31 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.kotlin.subscribeBy
 import ru.nikitaartamonov.rickandmorty.App
 import ru.nikitaartamonov.rickandmorty.data.Constants
+import ru.nikitaartamonov.rickandmorty.domain.Event
 import ru.nikitaartamonov.rickandmorty.domain.entities.EntityPage
 import ru.nikitaartamonov.rickandmorty.domain.entities.PageInfo
 import ru.nikitaartamonov.rickandmorty.domain.entities.location.LocationEntity
 import ru.nikitaartamonov.rickandmorty.domain.entities.location.LocationsFilterState
+import ru.nikitaartamonov.rickandmorty.domain.recycler_view.IdentifiedEntity
+import ru.nikitaartamonov.rickandmorty.domain.recycler_view.OnItemClickListener
 import ru.nikitaartamonov.rickandmorty.ui.pages.locations.recycler_view.LocationsAdapter
 
 class LocationsViewModel(application: Application) : AndroidViewModel(application),
     LocationsContract.ViewModel {
 
-    override val adapter: LocationsAdapter = LocationsAdapter()
+    private val listener = object : OnItemClickListener {
+        override fun <T : IdentifiedEntity> onClick(entity: T) {
+            openEntityDetailsLiveData.postValue(Event(entity.id))
+        }
+    }
+    override val adapter: LocationsAdapter = LocationsAdapter(listener)
 
     override val showLoadingIndicatorLiveData: LiveData<Boolean> = MutableLiveData()
     override val setErrorModeLiveData: LiveData<Boolean> = MutableLiveData()
     override val emptyResponseLiveData: LiveData<Boolean> = MutableLiveData()
     override val renderLocationsListLiveData: LiveData<EntityPage<LocationEntity>> =
         MutableLiveData()
+    override val openEntityDetailsLiveData: LiveData<Event<Int>> = MutableLiveData()
 
     private var lastLoadedPageNumber = 0
     private var pageToLoadNumber = 1

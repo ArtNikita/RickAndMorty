@@ -8,6 +8,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.chip.Chip
@@ -70,10 +71,19 @@ class CharactersFragment : Fragment(R.layout.fragment_characters) {
         viewModel.renderCharactersListLiveData.observe(viewLifecycleOwner) { adapter.updateList(it) }
         viewModel.setErrorModeLiveData.observe(viewLifecycleOwner) { setErrorMode(it) }
         viewModel.emptyResponseLiveData.observe(viewLifecycleOwner) { setEmptyResponseMode(it) }
+        viewModel.openEntityDetailsLiveData.observe(viewLifecycleOwner) { event ->
+            event.getContentIfNotHandled()?.let { openCharacterDetails(it) }
+        }
+    }
+
+    private fun openCharacterDetails(id: Int) {
+        //todo
+        findNavController().navigate(R.id.action_charactersFragment_to_characterDetailsFragment)
     }
 
     private fun setEmptyResponseMode(isVisible: Boolean) {
-        binding.charactersEmptyResponseTextView.visibility = if (isVisible) View.VISIBLE else View.GONE
+        binding.charactersEmptyResponseTextView.visibility =
+            if (isVisible) View.VISIBLE else View.GONE
     }
 
     private fun setErrorMode(isVisible: Boolean) {

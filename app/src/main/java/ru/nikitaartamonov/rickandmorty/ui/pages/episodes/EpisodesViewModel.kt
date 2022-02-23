@@ -9,22 +9,31 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.kotlin.subscribeBy
 import ru.nikitaartamonov.rickandmorty.App
 import ru.nikitaartamonov.rickandmorty.data.Constants
+import ru.nikitaartamonov.rickandmorty.domain.Event
 import ru.nikitaartamonov.rickandmorty.domain.entities.EntityPage
 import ru.nikitaartamonov.rickandmorty.domain.entities.PageInfo
 import ru.nikitaartamonov.rickandmorty.domain.entities.episode.EpisodeEntity
 import ru.nikitaartamonov.rickandmorty.domain.entities.episode.EpisodesFilterState
+import ru.nikitaartamonov.rickandmorty.domain.recycler_view.IdentifiedEntity
+import ru.nikitaartamonov.rickandmorty.domain.recycler_view.OnItemClickListener
 import ru.nikitaartamonov.rickandmorty.ui.pages.episodes.recycler_view.EpisodesAdapter
 
 class EpisodesViewModel(application: Application) : AndroidViewModel(application),
     EpisodesContract.ViewModel {
 
-    override val adapter: EpisodesAdapter = EpisodesAdapter()
+    private val listener = object : OnItemClickListener {
+        override fun <T : IdentifiedEntity> onClick(entity: T) {
+            openEntityDetailsLiveData.postValue(Event(entity.id))
+        }
+    }
+    override val adapter: EpisodesAdapter = EpisodesAdapter(listener)
 
     override val showLoadingIndicatorLiveData: LiveData<Boolean> = MutableLiveData()
     override val setErrorModeLiveData: LiveData<Boolean> = MutableLiveData()
     override val emptyResponseLiveData: LiveData<Boolean> = MutableLiveData()
     override val renderEpisodesListLiveData: LiveData<EntityPage<EpisodeEntity>> =
         MutableLiveData()
+    override val openEntityDetailsLiveData: LiveData<Event<Int>> = MutableLiveData()
 
     private var lastLoadedPageNumber = 0
     private var pageToLoadNumber = 1

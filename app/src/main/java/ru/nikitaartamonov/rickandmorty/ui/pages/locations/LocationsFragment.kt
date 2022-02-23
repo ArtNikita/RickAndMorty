@@ -62,6 +62,13 @@ class LocationsFragment : Fragment(R.layout.fragment_locations) {
         viewModel.renderLocationsListLiveData.observe(viewLifecycleOwner) { adapter.updateList(it) }
         viewModel.setErrorModeLiveData.observe(viewLifecycleOwner) { setErrorMode(it) }
         viewModel.emptyResponseLiveData.observe(viewLifecycleOwner) { setEmptyResponseMode(it) }
+        viewModel.openEntityDetailsLiveData.observe(viewLifecycleOwner) { event ->
+            event.getContentIfNotHandled()?.let { openLocationDetails(it) }
+        }
+    }
+
+    private fun openLocationDetails(id: Int) {
+        //todo
     }
 
     private fun setEmptyResponseMode(isVisible: Boolean) {

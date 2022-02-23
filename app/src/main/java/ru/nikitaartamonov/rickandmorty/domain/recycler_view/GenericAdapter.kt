@@ -4,7 +4,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import ru.nikitaartamonov.rickandmorty.domain.entities.EntityPage
 
-abstract class GenericAdapter<T : IdentifiedEntity, E : RecyclerView.ViewHolder> :
+abstract class GenericAdapter<T : IdentifiedEntity, E : RecyclerView.ViewHolder>(protected val listener: OnItemClickListener) :
     RecyclerView.Adapter<E>() {
 
     protected var entitiesList: MutableList<T> = mutableListOf()
