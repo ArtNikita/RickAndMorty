@@ -27,4 +27,6 @@
     <string name="genderless" translatable="false">Genderless</string>
     <string name="nothing_was_found">Nothing was found 👀</string>
     <string name="episodes_filter_edit_text_hint">Episode code</string>
+    <string name="type">Type</string>
+    <string name="dimension">Dimension</string>
 </resources>

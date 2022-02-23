@@ -166,9 +166,9 @@ class CharactersViewModel(application: Application) : AndroidViewModel(applicati
             )
     }
 
-    private fun saveToLocalRepo(it: EntityPage<CharacterEntity>) {
+    private fun saveToLocalRepo(page: EntityPage<CharacterEntity>) {
         compositeDisposable.add(
-            getApplication<App>().appComponent.getCharactersRepo().addAll(it.results).subscribe()
+            getApplication<App>().appComponent.getCharactersRepo().addAll(page.results).subscribe()
         )
     }
 

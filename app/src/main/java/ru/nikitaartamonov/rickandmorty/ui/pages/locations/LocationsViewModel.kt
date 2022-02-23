@@ -1,4 +1,4 @@
-package ru.nikitaartamonov.rickandmorty.ui.pages.episodes
+package ru.nikitaartamonov.rickandmorty.ui.pages.locations
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -11,66 +11,74 @@ import ru.nikitaartamonov.rickandmorty.App
 import ru.nikitaartamonov.rickandmorty.data.Constants
 import ru.nikitaartamonov.rickandmorty.domain.entities.EntityPage
 import ru.nikitaartamonov.rickandmorty.domain.entities.PageInfo
-import ru.nikitaartamonov.rickandmorty.domain.entities.episode.EpisodeEntity
-import ru.nikitaartamonov.rickandmorty.domain.entities.episode.EpisodesFilterState
-import ru.nikitaartamonov.rickandmorty.ui.pages.episodes.recycler_view.EpisodesAdapter
+import ru.nikitaartamonov.rickandmorty.domain.entities.location.LocationEntity
+import ru.nikitaartamonov.rickandmorty.domain.entities.location.LocationsFilterState
+import ru.nikitaartamonov.rickandmorty.ui.pages.locations.recycler_view.LocationsAdapter
 
-class EpisodesViewModel(application: Application) : AndroidViewModel(application),
-    EpisodesContract.ViewModel {
+class LocationsViewModel(application: Application) : AndroidViewModel(application),
+    LocationsContract.ViewModel {
 
-    override val adapter: EpisodesAdapter = EpisodesAdapter()
+    override val adapter: LocationsAdapter = LocationsAdapter()
 
     override val showLoadingIndicatorLiveData: LiveData<Boolean> = MutableLiveData()
     override val setErrorModeLiveData: LiveData<Boolean> = MutableLiveData()
     override val emptyResponseLiveData: LiveData<Boolean> = MutableLiveData()
-    override val renderEpisodesListLiveData: LiveData<EntityPage<EpisodeEntity>> =
+    override val renderLocationsListLiveData: LiveData<EntityPage<LocationEntity>> =
         MutableLiveData()
 
     private var lastLoadedPageNumber = 0
     private var pageToLoadNumber = 1
 
-    private val episodesFilterState = EpisodesFilterState()
+    private val locationsFilterState = LocationsFilterState()
 
-    private var episodesPage: EntityPage<EpisodeEntity> =
+    private var locationsPage: EntityPage<LocationEntity> =
         EntityPage(PageInfo(0, 0, null, null), emptyList())
         set(value) {
             field = value
-            renderEpisodesListLiveData.postValue(value)
+            renderLocationsListLiveData.postValue(value)
         }
 
     override fun onRecyclerViewScrolledDown() {
         if (pageToLoadNumber == lastLoadedPageNumber) {
-            loadEpisodes(
+            loadLocations(
                 page = ++pageToLoadNumber,
-                episodesFilterState
+                locationsFilterState
             )
         }
     }
 
     override fun onRetryButtonPressed() {
-        loadEpisodes(page = pageToLoadNumber, episodesFilterState)
+        loadLocations(page = pageToLoadNumber, locationsFilterState)
     }
 
     override fun onQueryTextChange(text: String) {
         lastLoadedPageNumber = 0
         pageToLoadNumber = 1
-        episodesFilterState.name = text
-        loadEpisodes(page = pageToLoadNumber, episodesFilterState)
+        locationsFilterState.name = text
+        loadLocations(page = pageToLoadNumber, locationsFilterState)
     }
 
-    override fun onFilterStateChange(
-        episodeName: String
+    override fun onFiltersStateChange(
+        filterType: LocationsFilterState.Companion.FilterType,
+        filterName: String
     ) {
-        episodesFilterState.episodeName = episodeName
+        when (filterType) {
+            LocationsFilterState.Companion.FilterType.TYPE -> {
+                locationsFilterState.type = filterName
+            }
+            LocationsFilterState.Companion.FilterType.DIMENSION -> {
+                locationsFilterState.dimension = filterName
+            }
+        }
         lastLoadedPageNumber = 0
         pageToLoadNumber = 1
-        loadEpisodes(page = pageToLoadNumber, episodesFilterState)
+        loadLocations(page = pageToLoadNumber, locationsFilterState)
     }
 
     override fun onRefresh() {
         lastLoadedPageNumber = 0
         pageToLoadNumber = 1
-        loadEpisodes(page = pageToLoadNumber, episodesFilterState)
+        loadLocations(page = pageToLoadNumber, locationsFilterState)
     }
 
     private var isLoading = false
@@ -94,25 +102,26 @@ class EpisodesViewModel(application: Application) : AndroidViewModel(application
     private var compositeDisposable = CompositeDisposable()
 
     init {
-        loadEpisodes(page = pageToLoadNumber, episodesFilterState)
+        loadLocations(page = pageToLoadNumber, locationsFilterState)
     }
 
-    private fun loadEpisodes(
+    private fun loadLocations(
         page: Int? = null,
-        episodesFilterState: EpisodesFilterState
+        locationsFilterState: LocationsFilterState
     ) {
         isLoading = true
         isEmptyResponse = false
         compositeDisposable.add(getApplication<App>().appComponent.getNetworkApi()
-            .getEpisodesPage(
+            .getLocationsPage(
                 page,
-                episodesFilterState.name,
-                episodesFilterState.episodeName
+                locationsFilterState.name,
+                locationsFilterState.type,
+                locationsFilterState.dimension
             )
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
                 onSuccess = {
-                    episodesPage = it
+                    locationsPage = it
                     lastLoadedPageNumber = pageToLoadNumber
                     saveToLocalRepo(it)
                     isLoading = false
@@ -124,7 +133,7 @@ class EpisodesViewModel(application: Application) : AndroidViewModel(application
                         errorMode = false
                         if (lastLoadedPageNumber != 0) return@subscribeBy
                         isEmptyResponse = true
-                        episodesPage = EntityPage(PageInfo(-1, -1, null, null), emptyList())
+                        locationsPage = EntityPage(PageInfo(-1, -1, null, null), emptyList())
                     } else {
                         errorMode = true
                         loadFromRoomRepo()
@@ -135,25 +144,26 @@ class EpisodesViewModel(application: Application) : AndroidViewModel(application
     }
 
     private fun loadFromRoomRepo() {
-        getApplication<App>().appComponent.getEpisodesRepo().getAll(
+        getApplication<App>().appComponent.getLocationRepo().getAll(
             Constants.ENTITY_PAGE_SIZE, Constants.ENTITY_PAGE_SIZE * lastLoadedPageNumber,
-            episodesFilterState.name,
-            episodesFilterState.episodeName
+            locationsFilterState.name,
+            locationsFilterState.type ?: "",
+            locationsFilterState.dimension ?: ""
         )
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
                 onSuccess = {
                     isLoading = false
                     val prevPage = if (lastLoadedPageNumber == 0) null else "-1"
-                    episodesPage = EntityPage(PageInfo(-1, -1, "-1", prevPage), it)
+                    locationsPage = EntityPage(PageInfo(-1, -1, "-1", prevPage), it)
                     if (it.isEmpty() && lastLoadedPageNumber == 0) isEmptyResponse = true
                 }
             )
     }
 
-    private fun saveToLocalRepo(page: EntityPage<EpisodeEntity>) {
+    private fun saveToLocalRepo(page: EntityPage<LocationEntity>) {
         compositeDisposable.add(
-            getApplication<App>().appComponent.getEpisodesRepo().addAll(page.results).subscribe()
+            getApplication<App>().appComponent.getLocationRepo().addAll(page.results).subscribe()
         )
     }
 
