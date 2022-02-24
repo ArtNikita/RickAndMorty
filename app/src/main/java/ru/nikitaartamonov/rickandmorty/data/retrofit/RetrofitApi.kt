@@ -42,13 +42,13 @@ interface RetrofitApi {
     fun getCharactersByIds(@Path("ids") ids: String): Single<List<CharacterEntity>>
 
     @GET("episode/{id}")
-    fun getEpisodeById(@Path("id") id: String): Single<EpisodeEntity>
+    fun getEpisodeById(@Path("id") id: Int): Single<EpisodeEntity>
 
     @GET("episode/{ids}")
     fun getEpisodesByIds(@Path("ids") ids: String): Single<List<EpisodeEntity>>
 
     @GET("location/{id}")
-    fun getLocationById(@Path("id") id: String): Single<LocationEntity>
+    fun getLocationById(@Path("id") id: Int): Single<LocationEntity>
 
     @GET("location/{ids}")
     fun getLocationsByIds(@Path("ids") ids: String): Single<List<LocationEntity>>

@@ -25,5 +25,41 @@
         <argument
             android:name="name"
             app:argType="string" />
+        <action
+            android:id="@+id/action_locationDetailsFragment_to_characterDetailsFragment"
+            app:destination="@id/characterDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/characterDetailsFragment"
+        android:name="ru.nikitaartamonov.rickandmorty.ui.pages.character_details.CharacterDetailsFragment"
+        android:label="{name}"
+        tools:layout="@layout/fragment_character_details" >
+        <argument
+            android:name="id"
+            app:argType="integer" />
+        <argument
+            android:name="name"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_characterDetailsFragment_to_locationDetailsFragment"
+            app:destination="@id/locationDetailsFragment" />
+        <action
+            android:id="@+id/action_characterDetailsFragment_to_episodeDetailsFragment"
+            app:destination="@id/episodeDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/episodeDetailsFragment"
+        android:name="ru.nikitaartamonov.rickandmorty.ui.pages.episode_details.EpisodeDetailsFragment"
+        android:label="{name}"
+        tools:layout="@layout/fragment_episode_details" >
+        <argument
+            android:name="id"
+            app:argType="integer" />
+        <argument
+            android:name="name"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_episodeDetailsFragment_to_characterDetailsFragment"
+            app:destination="@id/characterDetailsFragment" />
     </fragment>
 </navigation>

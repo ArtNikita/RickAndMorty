@@ -43,6 +43,9 @@
         <argument
             android:name="name"
             app:argType="string" />
+        <action
+            android:id="@+id/action_episodeDetailsFragment_to_characterDetailsFragment"
+            app:destination="@id/characterDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/locationDetailsFragment"
@@ -55,5 +58,8 @@
         <argument
             android:name="name"
             app:argType="string" />
+        <action
+            android:id="@+id/action_locationDetailsFragment_to_characterDetailsFragment"
+            app:destination="@id/characterDetailsFragment" />
     </fragment>
 </navigation>
