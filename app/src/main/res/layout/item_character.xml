@@ -40,6 +40,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:padding="@dimen/extra_small_margin_or_padding"
+            android:textColor="?colorPrimary"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="@id/character_image_view_container_card_view"
             app:layout_constraintStart_toStartOf="@id/character_image_view_container_card_view"
@@ -49,7 +50,7 @@
             android:id="@+id/item_character_species_text_view"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:padding="@dimen/extra_small_margin_or_padding"
+            android:paddingHorizontal="@dimen/extra_small_margin_or_padding"
             app:layout_constraintEnd_toEndOf="@id/character_image_view_container_card_view"
             app:layout_constraintStart_toStartOf="@id/character_image_view_container_card_view"
             app:layout_constraintTop_toBottomOf="@id/item_character_name_text_view" />
@@ -58,7 +59,7 @@
             android:id="@+id/item_character_status_text_view"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:padding="@dimen/extra_small_margin_or_padding"
+            android:paddingHorizontal="@dimen/extra_small_margin_or_padding"
             app:layout_constraintEnd_toEndOf="@id/character_image_view_container_card_view"
             app:layout_constraintStart_toStartOf="@id/character_image_view_container_card_view"
             app:layout_constraintTop_toBottomOf="@id/item_character_species_text_view" />
@@ -67,7 +68,7 @@
             android:id="@+id/item_character_gender_text_view"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:padding="@dimen/extra_small_margin_or_padding"
+            android:paddingHorizontal="@dimen/extra_small_margin_or_padding"
             app:layout_constraintEnd_toEndOf="@id/character_image_view_container_card_view"
             app:layout_constraintStart_toStartOf="@id/character_image_view_container_card_view"
             app:layout_constraintTop_toBottomOf="@id/item_character_status_text_view" />
