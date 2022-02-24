@@ -1,10 +1,67 @@
 package ru.nikitaartamonov.rickandmorty.ui.pages.location_details
 
+import android.os.Bundle
+import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import by.kirich1409.viewbindingdelegate.viewBinding
 import ru.nikitaartamonov.rickandmorty.R
+import ru.nikitaartamonov.rickandmorty.databinding.FragmentLocationDetailsBinding
+import ru.nikitaartamonov.rickandmorty.domain.entities.location.LocationEntity
 
 class LocationDetailsFragment : Fragment(R.layout.fragment_location_details) {
 
     private val args by navArgs<LocationDetailsFragmentArgs>()
+
+    private val binding by viewBinding(FragmentLocationDetailsBinding::bind)
+    private val viewModel: LocationDetailsContract.ViewModel by viewModels<LocationDetailsViewModel>()
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initViews()
+        initViewModel()
+        viewModel.onViewCreated(args.id)
+    }
+
+    private fun initViews() {
+        binding.locationDetailsRetryButton.setOnClickListener { viewModel.onRetryButtonPressed(args.id) }
+        binding.locationDetailsCharactersRecyclerView.adapter = viewModel.adapter
+    }
+
+    private fun initViewModel() {
+        viewModel.showLoadingIndicatorLiveData.observe(viewLifecycleOwner) { showLoadingIndicator(it) }
+        viewModel.setErrorModeLiveData.observe(viewLifecycleOwner) { setErrorMode(it) }
+        viewModel.renderLocationEntityLiveData.observe(viewLifecycleOwner) {
+            renderLocationEntity(it)
+        }
+        viewModel.renderCharactersListLiveData.observe(viewLifecycleOwner) {
+            viewModel.adapter.updateList(it)
+        }
+        viewModel.openEntityDetailsLiveData.observe(viewLifecycleOwner) { event ->
+            event.getContentIfNotHandled()?.let {
+                val direction =
+                    LocationDetailsFragmentDirections.actionLocationDetailsFragmentToCharacterDetailsFragment(
+                        it.id, it.name
+                    )
+                findNavController().navigate(direction)
+            }
+        }
+    }
+
+    private fun renderLocationEntity(locationEntity: LocationEntity) {
+        val typeText = "${getString(R.string.type)}: ${locationEntity.type}"
+        val dimensionText = "${getString(R.string.dimension)}: ${locationEntity.dimension}"
+        binding.locationDetailsTypeTextView.text = typeText
+        binding.locationDetailsDimensionTextView.text = dimensionText
+    }
+
+    private fun showLoadingIndicator(isVisible: Boolean) {
+        binding.locationDetailsProgressBar.visibility = if (isVisible) View.VISIBLE else View.GONE
+    }
+
+    private fun setErrorMode(isVisible: Boolean) {
+        binding.locationDetailsRetryButton.visibility = if (isVisible) View.VISIBLE else View.GONE
+    }
 }
