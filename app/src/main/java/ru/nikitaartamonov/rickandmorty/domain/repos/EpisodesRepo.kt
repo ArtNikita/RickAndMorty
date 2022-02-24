@@ -16,4 +16,8 @@ interface EpisodesRepo {
         name: String,
         episode: String,
     ): Single<List<EpisodeEntity>>
+
+    fun getById(id: Int): Single<EpisodeEntity>
+
+    fun getByIds(ids: List<Int>): Single<List<EpisodeEntity>>
 }

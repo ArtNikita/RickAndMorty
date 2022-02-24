@@ -27,4 +27,11 @@ class CharactersRepoRoom(private val characterDao: CharacterDao) : CharactersRep
     ): Single<List<CharacterEntity>> =
         characterDao.getAll(limit, offset, name, species, status, gender)
             .subscribeOn(Schedulers.io())
+
+    override fun getById(id: Int): Single<CharacterEntity> =
+        characterDao.getById(id).subscribeOn(Schedulers.io())
+
+    override fun getByIds(ids: List<Int>): Single<List<CharacterEntity>> =
+        characterDao.getByIds(ids).subscribeOn(Schedulers.io())
+
 }

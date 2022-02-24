@@ -24,7 +24,6 @@
             app:argType="integer" />
         <argument
             android:name="name"
-            android:defaultValue='""'
             app:argType="string" />
     </fragment>
 </navigation>

@@ -17,4 +17,8 @@ interface LocationsRepo {
         type: String,
         dimension: String,
     ): Single<List<LocationEntity>>
+
+    fun getById(id: Int): Single<LocationEntity>
+
+    fun getByIds(ids: List<Int>): Single<List<LocationEntity>>
 }

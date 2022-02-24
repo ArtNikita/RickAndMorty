@@ -25,4 +25,10 @@ class LocationsRepoRoom(private val locationDao: LocationDao) : LocationsRepo {
         dimension: String
     ): Single<List<LocationEntity>> =
         locationDao.getAll(limit, offset, name, type, dimension).subscribeOn(Schedulers.io())
+
+    override fun getById(id: Int): Single<LocationEntity> =
+        locationDao.getById(id).subscribeOn(Schedulers.io())
+
+    override fun getByIds(ids: List<Int>): Single<List<LocationEntity>> =
+        locationDao.getByIds(ids).subscribeOn(Schedulers.io())
 }

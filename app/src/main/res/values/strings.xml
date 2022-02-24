@@ -29,4 +29,6 @@
     <string name="episodes_filter_edit_text_hint">Episode code</string>
     <string name="type">Type</string>
     <string name="dimension">Dimension</string>
+    <string name="origin">Origin</string>
+    <string name="location">Location</string>
 </resources>

@@ -26,4 +26,10 @@ interface CharacterDao {
         status: String,
         gender: String
     ): Single<List<CharacterEntity>>
+
+    @Query("SELECT * FROM characterentity WHERE id == :id")
+    fun getById(id: Int): Single<CharacterEntity>
+
+    @Query("SELECT * FROM characterentity WHERE id in (:ids)")
+    fun getByIds(ids: List<Int>): Single<List<CharacterEntity>>
 }

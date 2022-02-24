@@ -25,4 +25,10 @@ interface LocationDao {
         type: String,
         dimension: String
     ): Single<List<LocationEntity>>
+
+    @Query("SELECT * FROM locationentity WHERE id == :id")
+    fun getById(id: Int): Single<LocationEntity>
+
+    @Query("SELECT * FROM locationentity WHERE id in (:ids)")
+    fun getByIds(ids: List<Int>): Single<List<LocationEntity>>
 }

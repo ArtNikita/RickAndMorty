@@ -18,4 +18,8 @@ interface CharactersRepo {
         status: String,
         gender: String
     ): Single<List<CharacterEntity>>
+
+    fun getById(id: Int): Single<CharacterEntity>
+
+    fun getByIds(ids: List<Int>): Single<List<CharacterEntity>>
 }

@@ -24,4 +24,10 @@ interface EpisodeDao {
         name: String,
         episode: String
     ): Single<List<EpisodeEntity>>
+
+    @Query("SELECT * FROM episodeentity WHERE id == :id")
+    fun getById(id: Int): Single<EpisodeEntity>
+
+    @Query("SELECT * FROM episodeentity WHERE id in (:ids)")
+    fun getByIds(ids: List<Int>): Single<List<EpisodeEntity>>
 }

@@ -24,4 +24,11 @@ class EpisodesRepoRoom(private val episodeDao: EpisodeDao) : EpisodesRepo {
         episode: String,
     ): Single<List<EpisodeEntity>> =
         episodeDao.getAll(limit, offset, name, episode).subscribeOn(Schedulers.io())
+
+    override fun getById(id: Int): Single<EpisodeEntity> =
+        episodeDao.getById(id).subscribeOn(Schedulers.io())
+
+    override fun getByIds(ids: List<Int>): Single<List<EpisodeEntity>> =
+        episodeDao.getByIds(ids).subscribeOn(Schedulers.io())
+
 }
